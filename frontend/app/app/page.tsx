@@ -6,9 +6,10 @@ import TemplateGallery from '../../components/TemplateGallery'
 import EditorInput from '../../components/EditorInput'
 import OptionsPanel from '../../components/OptionsPanel'
 import CorrectionModal from '../../components/CorrectionModal'
+import { fetchWrapper } from '../../lib/fetchWrapper'
 
 export default function AppPage() {
-  const [templateId, setTemplateId] = useState<string>('default')
+  const [templateId, setTemplateId] = useState<string>('')
   const [rawText, setRawText] = useState<string>('')
   const [spellcheck, setSpellcheck] = useState<boolean>(true)
   const [analysisId, setAnalysisId] = useState<string>('')
@@ -17,23 +18,30 @@ export default function AppPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  const handleTemplateSelect = (id: string) => {
+    setTemplateId(id)
+  }
+
   const analyze = async () => {
     if (!rawText.trim()) { setError('Cole um texto para analisar.'); return }
+    if (!templateId) { setError('Selecione um modelo primeiro.'); return }
     setLoading(true)
     setError('')
     try {
-      const token = localStorage.getItem('token') || ''
-      const res = await fetch('/api/v1/document/analyze', {
+      const res = await fetchWrapper('/api/v1/document/analyze', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ rawText, templateId, options: { spellcheck } })
       })
-      if (!res.ok) throw new Error('Falha ao analisar o texto')
       const data = await res.json()
-      setAnalysisId(data.analysisId)
+      const newAnalysisId = data.analysisId
+      setAnalysisId(newAnalysisId)
       setCorrections(data.corrections || [])
-      if ((data.corrections || []).length) setOpen(true)
-      else generate([])
+      if ((data.corrections || []).length) {
+        setOpen(true)
+      } else {
+        // Se não há correções, gerar diretamente com o analysisId recebido
+        await generate([], newAnalysisId)
+      }
     } catch (e: any) {
       setError(e?.message || 'Erro inesperado. Tente novamente.')
     } finally {
@@ -41,17 +49,20 @@ export default function AppPage() {
     }
   }
 
-  const generate = async (approvedIds: string[]) => {
+  const generate = async (approvedIds: string[], overrideAnalysisId?: string) => {
+    const idToUse = overrideAnalysisId || analysisId
+    if (!idToUse) {
+      setError('ID de análise não encontrado. Por favor, analise o texto novamente.')
+      return
+    }
+
     setLoading(true)
     setError('')
     try {
-      const token = localStorage.getItem('token') || ''
-      const res = await fetch('/api/v1/document/generate', {
+      const res = await fetchWrapper('/api/v1/document/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ analysisId, approvedCorrectionIds: approvedIds })
+        body: JSON.stringify({ analysisId: idToUse, approvedCorrectionIds: approvedIds })
       })
-      if (!res.ok) throw new Error('Falha ao gerar o documento')
       const blob = await res.blob()
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
@@ -77,7 +88,7 @@ export default function AppPage() {
       <div className="grid md:grid-cols-5 gap-6">
         <div className="md:col-span-2 card p-4">
           <h2 className="font-medium mb-3">Modelos</h2>
-          <TemplateGallery selected={templateId} onSelect={setTemplateId} />
+          <TemplateGallery selected={templateId} onSelect={handleTemplateSelect} />
         </div>
 
         <div className="md:col-span-3 card p-4 space-y-4">
@@ -85,14 +96,14 @@ export default function AppPage() {
           <EditorInput value={rawText} onChange={setRawText} />
           <div className="flex items-center justify-between">
             <OptionsPanel spellcheck={spellcheck} onSpellcheckChange={setSpellcheck} onAnalyze={analyze} />
-            <button className="btn-primary" onClick={analyze} disabled={loading || !rawText.trim()}>
+            <button className="btn-primary" onClick={analyze} disabled={loading || !rawText.trim() || !templateId}>
               {loading ? 'Processando…' : (<><FaMagic /> Analisar</>)}
             </button>
           </div>
         </div>
       </div>
 
-      <CorrectionModal open={open} corrections={corrections} onClose={()=>setOpen(false)} onApply={generate} />
+      <CorrectionModal open={open} corrections={corrections} onClose={()=>setOpen(false)} onApply={(ids) => generate(ids)} />
     </div>
   )
 }

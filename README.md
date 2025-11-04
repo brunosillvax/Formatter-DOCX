@@ -49,16 +49,35 @@ psql "postgresql://postgres:postgres@localhost:5432/formatter" -f backend/migrat
 
 ## Instalação e execução
 
-Abra dois terminais.
+### Método 1: Script Automático (Windows PowerShell)
 
-### 1) Backend (FastAPI)
+Para iniciar todos os serviços de uma vez:
 
+```powershell
+# Na raiz do projeto
+.\start.ps1
+```
+
+Para parar todos os serviços:
+
+```powershell
+# Na raiz do projeto
+.\stop.ps1
+```
+
+### Método 2: Manual (múltiplos terminais)
+
+1. **Terminal 1 - Banco de dados e Redis:**
 ```bash
-# Terminal 1
+docker-compose up -d
+```
+
+2. **Terminal 2 - Backend (FastAPI):**
+```bash
 cd backend
 python -m venv .venv
 # Windows PowerShell
-. .venv/Scripts/Activate.ps1
+.\.venv\Scripts\Activate.ps1
 # Linux/macOS
 # source .venv/bin/activate
 
@@ -66,24 +85,23 @@ pip install -r ../requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
 
-A API ficará em `http://localhost:8000`.
-
-Checagem rápida:
-
+3. **Terminal 3 - Frontend (Next.js):**
 ```bash
-curl http://localhost:8000/health
-```
-
-### 2) Frontend (Next.js)
-
-```bash
-# Terminal 2
 cd frontend
 npm install
 npm run dev
 ```
 
-O site ficará em `http://localhost:3000`.
+A aplicação estará disponível em:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- PostgreSQL: localhost:15432
+- Redis: localhost:6379
+
+Checagem rápida da API:
+```bash
+curl http://localhost:8000/health
+```
 
 ## Fluxo de uso
 

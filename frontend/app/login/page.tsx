@@ -14,9 +14,10 @@ export default function LoginPage() {
     setLoading(true)
     setError('')
     try {
-      const res = await fetch('/api/v1/login', {
+      const { fetchWrapper } = await import('../../lib/fetchWrapper')
+      const res = await fetchWrapper('/api/v1/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        skipAuth: true, // Não precisa de token para login
         body: JSON.stringify({ username, password })
       })
       if (!res.ok) throw new Error('Credenciais inválidas')

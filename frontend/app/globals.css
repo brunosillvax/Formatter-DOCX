@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
@@ -10,11 +8,18 @@ input, textarea { font-family: inherit; }
 :root {
   --bg: 255 255 255;
   --fg: 17 24 39;
+  --accent: 99 102 241; /* rgb for #6366F1 */
 }
 
 html { color-scheme: light; }
 body {
-  @apply text-gray-900 bg-gradient-to-b from-white to-gray-50 min-h-screen antialiased selection:bg-accent/20 selection:text-gray-900;
+  @apply text-gray-900 bg-gradient-to-b from-white to-gray-50 min-h-screen antialiased;
+}
+
+/* Tailwind v4 não suporta mais `selection:` utilities — usar CSS nativo */
+::selection {
+  background-color: rgba(99, 102, 241, 0.20); /* accent/20 */
+  color: #111827; /* gray-900 */
 }
 
 .container-page {
@@ -26,7 +31,7 @@ body {
 }
 
 .btn-primary {
-  @apply inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-gray-900 active:scale-[.98] transition disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 active:scale-[.98] transition disabled:opacity-50 disabled:cursor-not-allowed;
 }
 
 .btn-secondary {
@@ -34,11 +39,16 @@ body {
 }
 
 /* Links */
-a { @apply underline-offset-4 decoration-transparent hover:decoration-accent transition; }
+a { @apply underline-offset-4 transition; }
+a:hover { @apply underline; }
 
 /* Inputs */
 .input {
-  @apply w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent/60 bg-white/90 backdrop-blur;
+  @apply w-full border rounded-lg px-3 py-2 bg-white/90 backdrop-blur;
+}
+.input:focus {
+  @apply outline-none;
+  border-color: rgb(var(--accent));
 }
 
 /* Section spacing */
@@ -48,7 +58,9 @@ a { @apply underline-offset-4 decoration-transparent hover:decoration-accent tra
 
 /* Badges */
 .badge {
-  @apply inline-flex items-center gap-2 text-xs font-medium px-2.5 py-1 rounded-full bg-accent/10 text-accent;
+  @apply inline-flex items-center gap-2 text-xs font-medium px-2.5 py-1 rounded-full;
+  background-color: rgba(99, 102, 241, 0.10);
+  color: rgb(var(--accent));
 }
 
 /* Shadows helpers */

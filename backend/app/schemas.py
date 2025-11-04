@@ -36,3 +36,15 @@ class AnalyzeResponse(BaseModel):
 class GenerateRequest(BaseModel):
     analysisId: str
     approvedCorrectionIds: Optional[List[str]] = None
+
+
+class TemplateItem(BaseModel):
+    id: str
+    name: str
+    description: Optional[str] = None
+    preview_url: Optional[str] = None
+    category: Optional[str] = None
+
+
+class TemplatesResponse(BaseModel):
+    templates: List[TemplateItem]

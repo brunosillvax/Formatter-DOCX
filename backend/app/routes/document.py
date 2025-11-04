@@ -23,8 +23,15 @@ def analyze(body: AnalyzeRequest, user_id: str = Depends(require_auth)):
         return AnalyzeResponse(**result)
     except ValueError as ve:
         raise HTTPException(status_code=404, detail=str(ve))
-    except Exception:
-        raise HTTPException(status_code=502, detail="Falha ao analisar o texto")
+    except RuntimeError as re:
+        # Erro de configuração (ex: API key não configurada)
+        raise HTTPException(status_code=500, detail=f"Erro de configuração: {str(re)}")
+    except Exception as e:
+        import traceback
+        error_detail = str(e)
+        print(f"Erro ao analisar texto: {error_detail}")
+        print(traceback.format_exc())
+        raise HTTPException(status_code=502, detail=f"Falha ao analisar o texto: {error_detail}")
 
 
 @router.post("/generate")
@@ -39,14 +46,19 @@ def generate(body: GenerateRequest, user_id: str = Depends(require_auth)):
     corrections = [c for c in (data.get("corrections_json") or []) if c.get("id") in approved]
 
     try:
+        structure_json = data.get("structure_json", [])
+        print(f"DEBUG: structure_json type: {type(structure_json)}, content: {str(structure_json)[:200]}")
         content = generate_docx_from_structure(
             raw_text=data["rawText"],
-            structure_json=data["structure_json"],
+            structure_json=structure_json,
             corrections=corrections,
             rules=tpl.get("rules", {}),
         )
-    except Exception:
-        raise HTTPException(status_code=500, detail="Erro ao gerar documento")
+    except Exception as e:
+        import traceback
+        print(f"Erro ao gerar documento: {str(e)}")
+        print(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"Erro ao gerar documento: {str(e)}")
     finally:
         cache_delete(key)
 

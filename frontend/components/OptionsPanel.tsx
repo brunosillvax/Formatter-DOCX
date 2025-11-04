@@ -11,9 +11,17 @@ export default function OptionsPanel({ spellcheck, onSpellcheckChange, onAnalyze
           type="button"
           aria-pressed={spellcheck}
           onClick={()=>onSpellcheckChange(!spellcheck)}
-          className={`relative inline-flex h-6 w-10 items-center rounded-full transition ${spellcheck?'bg-accent':'bg-gray-300'}`}
+          className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-200 ${
+            spellcheck
+              ? 'bg-accent shadow-lg shadow-accent/30'
+              : 'bg-gray-300'
+          }`}
         >
-          <span className={`h-5 w-5 bg-white rounded-full shadow transform transition ${spellcheck?'translate-x-5':'translate-x-1'}`} />
+          <span className={`h-6 w-6 bg-white rounded-full shadow-lg transform transition-all duration-200 ${
+            spellcheck
+              ? 'translate-x-6'
+              : 'translate-x-0.5'
+          }`} />
         </button>
       </label>
     </div>
