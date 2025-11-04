@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+button { cursor: pointer; }
+input, textarea { font-family: inherit; }
+
+:root {
+  --bg: 255 255 255;
+  --fg: 17 24 39;
+}
+
+html { color-scheme: light; }
+body {
+  @apply text-gray-900 bg-gradient-to-b from-white to-gray-50 min-h-screen antialiased selection:bg-accent/20 selection:text-gray-900;
+}
+
+.container-page {
+  @apply mx-auto max-w-5xl px-4;
+}
+
+.card {
+  @apply bg-white/80 backdrop-blur rounded-xl border border-gray-200 shadow-sm;
+}
+
+.btn-primary {
+  @apply inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-gray-900 active:scale-[.98] transition disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center gap-2 border px-4 py-2 rounded-lg hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Links */
+a { @apply underline-offset-4 decoration-transparent hover:decoration-accent transition; }
+
+/* Inputs */
+.input {
+  @apply w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent/60 bg-white/90 backdrop-blur;
+}
+
+/* Section spacing */
+.section {
+  @apply py-12 md:py-16;
+}
+
+/* Badges */
+.badge {
+  @apply inline-flex items-center gap-2 text-xs font-medium px-2.5 py-1 rounded-full bg-accent/10 text-accent;
+}
+
+/* Shadows helpers */
+.shadow-soft { @apply shadow-[0_1px_3px_0_rgba(0,0,0,0.08),0_1px_2px_-1px_rgba(0,0,0,0.06)]; }

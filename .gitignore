@@ -1,0 +1,23 @@
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/.turbo/
+
+# Python
+backend/.venv/
+__pycache__/
+*.pyc
+
+# Envs & secrets
+.env
+backend/.env
+
+# OS / misc
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build outputs
+frontend/out/
