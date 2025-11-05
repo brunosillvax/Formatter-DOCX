@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaSignInAlt } from 'react-icons/fa'
 
 export default function LoginPage() {
@@ -7,6 +7,23 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  // Se já estiver autenticado, redireciona para /app
+  useEffect(() => {
+    (async () => {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
+      if (!token) return
+      try {
+        const { fetchWrapper } = await import('../../lib/fetchWrapper')
+        const res = await fetchWrapper('/api/v1/me')
+        if (res.ok) {
+          window.location.href = '/app'
+        }
+      } catch {
+        // token inválido: segue na tela de login
+      }
+    })()
+  }, [])
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
