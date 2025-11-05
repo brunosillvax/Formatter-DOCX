@@ -1,6 +1,7 @@
 import './globals.css'
 import type { ReactNode } from 'react'
-import { FaFileWord, FaSignInAlt, FaHome } from 'react-icons/fa'
+import { FaFileWord } from 'react-icons/fa'
+import UserMenu from '../components/UserMenu'
 
 export const metadata = {
 	title: 'Formatter DOCX',
@@ -17,10 +18,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 							<FaFileWord className="text-accent" />
 							<span>Formatter DOCX</span>
 						</a>
-						<nav className="flex items-center gap-2">
-							<a className="btn-secondary" href="/"><FaHome /> Início</a>
-							<a className="btn-primary" href="/login"><FaSignInAlt /> Login</a>
-						</nav>
+                        <UserMenu />
 					</div>
 				</header>
 				<main className="container-page py-8">

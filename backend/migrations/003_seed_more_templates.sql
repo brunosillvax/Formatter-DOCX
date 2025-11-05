@@ -35,3 +35,5 @@ INSERT INTO templates (id, name, description, preview_url, rules) VALUES
 ON CONFLICT (id) DO NOTHING;
 
 
+
+

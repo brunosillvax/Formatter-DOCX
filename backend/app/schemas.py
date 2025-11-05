@@ -48,3 +48,15 @@ class TemplateItem(BaseModel):
 
 class TemplatesResponse(BaseModel):
     templates: List[TemplateItem]
+
+
+class PlanInfo(BaseModel):
+    name: str
+    status: str
+    expires_at: Optional[str] = None  # ISO8601 ou None para plano gratuito
+
+
+class UserProfile(BaseModel):
+    id: str
+    username: str
+    plan: PlanInfo

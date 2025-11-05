@@ -50,14 +50,14 @@ Plataforma web para analisar texto com IA, aplicar correções e gerar documento
 
 ## Principais Recursos
 
-| Recurso                                | Status     | Detalhes                                                                 |
-| -------------------------------------- | ---------- | ------------------------------------------------------------------------ |
-| ✍️ Correção ortográfica e estilo (IA)  | ✅ Estável | Usa modelos configuráveis (`GEMINI_MODEL`)                                |
-| 🔐 Autenticação JWT                    | ✅ Estável | `POST /api/v1/login` retorna `access_token`                               |
-| 📄 Geração de `.docx`                   | ✅ Estável | Download imediato do documento                                           |
-| ⚙️ Templates semânticos                | ✅ Estável | Seeds e migrações para templates                                         |
-| 🚦 Healthcheck da API                  | ✅ Estável | `GET /health`                                                            |
-| 🚀 Deploy local com Docker             | ✅ Estável | `docker compose up -d`                                                   |
+| Recurso                               | Status     | Detalhes                                    |
+| ------------------------------------- | ---------- | ------------------------------------------- |
+| ✍️ Correção ortográfica e estilo (IA) | ✅ Estável | Usa modelos configuráveis (`GEMINI_MODEL`)  |
+| 🔐 Autenticação JWT                   | ✅ Estável | `POST /api/v1/login` retorna `access_token` |
+| 📄 Geração de `.docx`                 | ✅ Estável | Download imediato do documento              |
+| ⚙️ Templates semânticos               | ✅ Estável | Seeds e migrações para templates            |
+| 🚦 Healthcheck da API                 | ✅ Estável | `GET /health`                               |
+| 🚀 Deploy local com Docker            | ✅ Estável | `docker compose up -d`                      |
 
 ## Requisitos
 
@@ -118,11 +118,13 @@ Para parar todos os serviços:
 ### Método 2: Manual (múltiplos terminais)
 
 1. **Terminal 1 - Banco de dados e Redis:**
+
 ```bash
 docker-compose up -d
 ```
 
 2. **Terminal 2 - Backend (FastAPI):**
+
 ```bash
 cd backend
 python -m venv .venv
@@ -136,6 +138,7 @@ uvicorn app.main:app --reload --port 8000
 ```
 
 3. **Terminal 3 - Frontend (Next.js):**
+
 ```bash
 cd frontend
 npm install
@@ -143,12 +146,14 @@ npm run dev
 ```
 
 A aplicação estará disponível em:
+
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8000
 - PostgreSQL: localhost:15432
 - Redis: localhost:6379
 
 Checagem rápida da API:
+
 ```bash
 curl http://localhost:8000/health
 ```

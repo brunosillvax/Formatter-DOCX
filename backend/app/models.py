@@ -35,3 +35,16 @@ def get_template_by_id(template_id: str) -> Optional[dict]:
             }
     finally:
         put_conn(conn)
+
+
+def get_user_by_id(user_id: str) -> Optional[dict]:
+    conn = get_conn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT id, username FROM users WHERE id=%s", (user_id,))
+            row = cur.fetchone()
+            if not row:
+                return None
+            return {"id": row[0], "username": row[1]}
+    finally:
+        put_conn(conn)
