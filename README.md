@@ -35,6 +35,7 @@ Plataforma web para analisar texto com IA, aplicar correções e gerar documento
 - [Instalação e Execução](#instalação-e-execução)
 - [Fluxo de Uso](#fluxo-de-uso)
 - [Endpoints Principais](#endpoints-principais)
+- [Deploy em Produção (Firebase + Square Cloud)](#deploy-em-produção-firebase--square-cloud)
 - [Troubleshooting](#troubleshooting)
 - [Roadmap](#roadmap)
 - [Licença](#licença)
@@ -176,11 +177,43 @@ curl http://localhost:8000/health
 
 Headers: `Authorization: Bearer <token>` para rotas de documento.
 
+## Deploy em Produção (Firebase + Square Cloud)
+
+Frontend (Firebase Hosting)
+- firebase.json já aponta para `docs/` com SPA fallback
+- Build (Next export estático):
+  1) `cd frontend && npm run build`
+  2) `cd .. && Copy-Item -Recurse -Force frontend/out/* docs/`
+  3) `firebase deploy --only hosting`
+
+Backend (Square Cloud)
+- Arquivo `squarecloud.app.yaml` na raiz define build/start e variáveis
+- Passos no painel:
+  1) Criar app (Publicação na Web ativada, subdomínio)
+  2) Variáveis essenciais:
+     - `FRONTEND_ORIGIN`: `https://<seu-site>.web.app,https://<seu-site>.firebaseapp.com`
+     - `DEMO_MODE`: `true` (permite rodar sem Postgres/Redis)
+     - `GEMINI_API_KEY`: sua chave (para usar Gemini no modo demo)
+  3) Fazer upload do `backend.zip` (contém `backend/`, `requirements.txt`, `squarecloud.app.yaml`)
+  4) Reiniciar a aplicação
+
+Sair do DEMO_MODE (produção real)
+- Provisionar bancos gerenciados
+  - `DATABASE_URL`: URL do Postgres
+  - `REDIS_URL`: URL do Redis (opcional; sem ele, cache em memória)
+- Definir `DEMO_MODE=false` no Square Cloud e reiniciar
+
+Config do Frontend
+- API: editar `frontend/lib/config.ts` → `API_BASE_URL` para a URL pública da Square Cloud
+- Rebuild e deploy no Firebase conforme acima
+
 ## Troubleshooting
 
 - 401 no login: verifique usuários no banco e senha.
-- Erros 5xx ao analisar/gerar: confirme `GEMINI_API_KEY`, banco/redis ativos e `.env` correto.
-- CORS: ajuste `CORS_ORIGINS` no `.env` conforme seu host/porta do frontend.
+- 5xx ao analisar/gerar no Square Cloud:
+  - Com DEMO_MODE=true: defina `GEMINI_API_KEY` (para usar Gemini) ou aguarde fallback simples;
+  - Se aparecer tentativa de conectar em Postgres, redeploy do `backend.zip` atualizado e confira `DEMO_MODE=true`.
+- CORS: confirme `FRONTEND_ORIGIN` no Square Cloud contendo os domínios `*.web.app`/`*.firebaseapp.com` do seu site.
 
 ## Roadmap
 
