@@ -65,3 +65,10 @@ a:hover { @apply underline; }
 
 /* Shadows helpers */
 .shadow-soft { @apply shadow-[0_1px_3px_0_rgba(0,0,0,0.08),0_1px_2px_-1px_rgba(0,0,0,0.06)]; }
+
+/* Dropdown menu padrão */
+.menu-dropdown {
+  @apply absolute z-50 bg-white/95 backdrop-blur rounded-xl border border-gray-200 shadow-soft overflow-hidden;
+}
+
+.menu-dropdown a { @apply no-underline; }

@@ -40,16 +40,16 @@ export default function UserMenu() {
 
   return (
     <div className="relative">
-      <button className="btn-secondary" onClick={() => setOpen(v=>!v)}>
+      <button className="btn-secondary" onClick={() => setOpen(v=>!v)} aria-haspopup="menu" aria-expanded={open}>
         <FaUserCircle /> {profile.username}
       </button>
       {open && (
-        <div className="menu-dropdown right-0 mt-2 w-64">
-          <div className="px-4 py-3 border-b">
+        <div className="menu-dropdown right-0 mt-2 w-72">
+          <div className="px-4 py-3 border-b bg-white/80">
             <div className="font-semibold flex items-center gap-2"><FaIdBadge /> Conta</div>
             <div className="text-sm text-gray-600">{profile.email || profile.username}</div>
           </div>
-          <div className="p-4 space-y-2">
+          <div className="p-4 space-y-2 bg-white">
             <div className="text-sm flex items-center justify-between">
               <span>Plano</span>
               <span className="font-medium">{profile.plan?.name || 'Free'}</span>
@@ -65,9 +65,9 @@ export default function UserMenu() {
               </div>
             )}
           </div>
-          <div className="border-t flex">
-            <a className="px-4 py-3 text-sm hover:bg-gray-50 flex-1" href="/app/profile">Ver perfil</a>
-            <button className="px-4 py-3 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2" onClick={logout}><FaSignOutAlt/> Sair</button>
+          <div className="border-t grid grid-cols-2 bg-white">
+            <a className="px-4 py-3 text-sm hover:bg-gray-50 no-underline" href="/app/profile">Ver perfil</a>
+            <button className="px-4 py-3 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 justify-end" onClick={logout}><FaSignOutAlt/> Sair</button>
           </div>
         </div>
       )}
