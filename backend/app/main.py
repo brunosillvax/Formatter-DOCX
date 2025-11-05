@@ -2,6 +2,8 @@
 import traceback
 import sys
 from .factory import create_app
+import os
+from fastapi.middleware.cors import CORSMiddleware
 
 try:
     print("Importando routers...")
@@ -18,6 +20,16 @@ try:
     app.include_router(auth_router)
     app.include_router(document_router)
     app.include_router(templates_router)
+
+    # CORS para permitir o frontend hospedado na Square Cloud (ou local)
+    allowed_origin = os.getenv("FRONTEND_ORIGIN", "*")
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[allowed_origin] if allowed_origin != "*" else ["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     print("Aplicação iniciada com sucesso!")
 except Exception as e:

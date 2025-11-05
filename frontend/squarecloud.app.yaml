@@ -1,0 +1,12 @@
+name: formatter-frontend
+project:
+  type: node
+  build:
+    - npm ci
+    - npm run build
+  start: npm run start
+env:
+  # Defina depois do deploy do backend: base URL da API
+  NEXT_PUBLIC_API_URL: https://seu-backend.square.app
+
+

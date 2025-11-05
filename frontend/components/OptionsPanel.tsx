@@ -9,15 +9,17 @@ export default function OptionsPanel({ spellcheck, onSpellcheckChange, onAnalyze
         {/* Toggle */}
         <button
           type="button"
-          aria-pressed={spellcheck}
+          role="switch"
+          aria-checked={spellcheck}
+          aria-label="Alternar correção ortográfica"
           onClick={()=>onSpellcheckChange(!spellcheck)}
-          className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-200 ${
+          className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-200 ease-friendly ${
             spellcheck
-              ? 'bg-accent shadow-lg shadow-accent/30'
+              ? 'bg-accent shadow-lg shadow-accent/30 -translate-y-[1px]'
               : 'bg-gray-300'
           }`}
         >
-          <span className={`h-6 w-6 bg-white rounded-full shadow-lg transform transition-all duration-200 ${
+          <span className={`h-6 w-6 bg-white rounded-full shadow-lg transform transition-all duration-200 ease-friendly ${
             spellcheck
               ? 'translate-x-6'
               : 'translate-x-0.5'

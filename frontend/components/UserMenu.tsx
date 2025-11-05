@@ -27,7 +27,6 @@ export default function UserMenu() {
   if (!profile) {
     return (
       <nav className="flex items-center gap-2">
-        <a className="btn-secondary" href="/"><FaHome /> Início</a>
         <a className="btn-primary" href="/login"><FaSignInAlt /> Login</a>
       </nav>
     )
@@ -74,5 +73,3 @@ export default function UserMenu() {
     </div>
   )
 }
-
-
