@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { FaHome, FaSignInAlt, FaUserCircle, FaSignOutAlt, FaIdBadge } from 'react-icons/fa'
 
 type PlanInfo = { name: string; status: string; expires_at?: string | null }
-type UserProfile = { id: string; username: string; plan: PlanInfo }
+type UserProfile = { id: string; username: string; email?: string | null; plan: PlanInfo }
 
 export default function UserMenu() {
   const [profile, setProfile] = useState<UserProfile | null>(null)
@@ -47,7 +47,7 @@ export default function UserMenu() {
         <div className="menu-dropdown right-0 mt-2 w-64">
           <div className="px-4 py-3 border-b">
             <div className="font-semibold flex items-center gap-2"><FaIdBadge /> Conta</div>
-            <div className="text-sm text-gray-600">{profile.username}</div>
+            <div className="text-sm text-gray-600">{profile.email || profile.username}</div>
           </div>
           <div className="p-4 space-y-2">
             <div className="text-sm flex items-center justify-between">
@@ -56,7 +56,7 @@ export default function UserMenu() {
             </div>
             <div className="text-sm flex items-center justify-between">
               <span>Status</span>
-              <span className="font-medium capitalize">{profile.plan?.status || 'active'}</span>
+              <span className="font-medium">{(profile.plan?.status || 'active') === 'active' ? 'Ativo' : 'Inativo'}</span>
             </div>
             {profile.plan?.expires_at && (
               <div className="text-sm flex items-center justify-between">

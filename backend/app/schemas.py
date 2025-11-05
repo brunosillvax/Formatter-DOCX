@@ -59,4 +59,13 @@ class PlanInfo(BaseModel):
 class UserProfile(BaseModel):
     id: str
     username: str
+    email: Optional[str] = None
     plan: PlanInfo
+
+
+class UpdateProfileRequest(BaseModel):
+    email: Optional[str] = None
+
+
+class ChangePlanRequest(BaseModel):
+    plan: str  # Free, Pro, Business
