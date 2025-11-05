@@ -68,7 +68,9 @@ a:hover { @apply underline; }
 
 /* Dropdown menu padrão */
 .menu-dropdown {
-  @apply absolute z-50 bg-white/95 backdrop-blur rounded-xl border border-gray-200 shadow-soft overflow-hidden;
+  @apply absolute z-50 bg-white/95 backdrop-blur rounded-xl border border-gray-200 overflow-hidden;
+  /* sombra equivalente à utilidade personalizada shadow-soft */
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.08), 0 1px 2px -1px rgba(0,0,0,0.06);
 }
 
 .menu-dropdown a { @apply no-underline; }
